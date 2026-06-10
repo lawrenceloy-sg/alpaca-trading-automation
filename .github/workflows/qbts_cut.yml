@@ -1,0 +1,24 @@
+name: QBTS Cut
+
+on:
+  schedule:
+    # 9:35 AM ET (EDT = UTC-4) = 13:35 UTC, Mon-Fri
+    - cron: '35 13 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  cut:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: pip install requests
+      - name: Cut QBTS
+        run: python scripts/cut_qbts.py
+        env:
+          ALPACA_API_KEY: ${{ secrets.ALPACA_API_KEY }}
+          ALPACA_API_SECRET: ${{ secrets.ALPACA_API_SECRET }}

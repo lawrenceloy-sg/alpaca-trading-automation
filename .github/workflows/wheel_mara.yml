@@ -1,0 +1,24 @@
+name: MARA Wheel Monitor
+
+on:
+  schedule:
+    # Every 15 min, 9:00 AM-4:45 PM ET (EDT UTC-4 = 13:00-20:45 UTC), Mon-Fri
+    - cron: '*/15 13-20 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  wheel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: pip install requests
+      - name: Run MARA wheel
+        run: python scripts/wheel_mara.py
+        env:
+          ALPACA_API_KEY: ${{ secrets.ALPACA_API_KEY }}
+          ALPACA_API_SECRET: ${{ secrets.ALPACA_API_SECRET }}
