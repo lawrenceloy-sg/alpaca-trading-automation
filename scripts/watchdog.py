@@ -5,7 +5,7 @@ Triggers stale wheels, exits 1 on unrecoverable failure (GitHub emails on failur
 import os, sys, requests
 from datetime import datetime, timezone
 
-GH_TOKEN    = os.environ["GH_PAT"]
+GH_TOKEN    = os.environ["GH_PAT"].lstrip('﻿').strip()
 REPO        = "lawrenceloy-sg/alpaca-trading-automation"
 GH_HEADERS  = {
     "Authorization": f"Bearer {GH_TOKEN}",
