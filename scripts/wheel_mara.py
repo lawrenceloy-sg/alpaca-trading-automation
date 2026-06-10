@@ -13,7 +13,7 @@ DATA_URL   = "https://data.alpaca.markets/v2"
 HEADERS    = {"APCA-API-KEY-ID": API_KEY, "APCA-API-SECRET-KEY": API_SECRET}
 
 SYMBOL         = "MARA"
-MAX_CASH       = 1100
+MAX_CASH       = 1200
 DTE_MIN        = 5
 DTE_MAX        = 9
 DELTA_MIN      = 0.20
@@ -229,7 +229,7 @@ bp   = float(acct["buying_power"])
 print(f"No open MARA position. Buying power: ${bp:.2f} (need ${MAX_CASH})")
 
 if bp < MAX_CASH:
-    print(f"  Insufficient BP — waiting for capital (SNAP cycle to close or QBTS to be cut)")
+    print(f"  Insufficient BP — waiting for SNAP cycle to close (frees ~$550)")
     sys.exit(0)
 
 print("Capital available — opening MARA wheel cycle")
