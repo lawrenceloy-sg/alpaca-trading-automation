@@ -1,0 +1,25 @@
+name: Watchdog
+
+on:
+  schedule:
+    # Every 30 min at :07 and :37, 9AM-4:45PM ET (EDT = UTC-4), Mon-Fri
+    - cron: '7,37 13-20 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: pip install requests
+      - name: Run watchdog
+        run: python scripts/watchdog.py
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+          ALPACA_API_KEY: ${{ secrets.ALPACA_API_KEY }}
+          ALPACA_API_SECRET: ${{ secrets.ALPACA_API_SECRET }}
