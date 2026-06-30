@@ -200,10 +200,13 @@ if snap_shares:
     cost_basis  = float(snap_shares["avg_entry_price"])
     print(f"STAGE 2: {qty_shares} shares, cost_basis=${cost_basis:.4f}")
 
-    # Check if call already open
-    open_calls = [o for o in open_orders if "C" in o.get("symbol", "") and o.get("side") == "sell"]
-    if open_calls:
-        print(f"  Call already open: {open_calls[0]['symbol']} — holding")
+    # Check if call already open (order) or already filled (position)
+    open_calls   = [o for o in open_orders if "C" in o.get("symbol", "") and o.get("side") == "sell"]
+    filled_calls = [p for p in positions if p["symbol"].startswith(SYMBOL) and "C" in p["symbol"] and float(p["qty"]) < 0]
+    if open_calls or filled_calls:
+        existing = open_calls[0]["symbol"] if open_calls else filled_calls[0]["symbol"]
+        cp = float(filled_calls[0]["current_price"]) if filled_calls else 0
+        print(f"  Call already active: {existing} current=${cp:.4f} — holding until expiry")
         sys.exit(0)
 
     hv       = get_hv(SYMBOL)
